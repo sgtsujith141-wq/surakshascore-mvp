@@ -173,7 +173,7 @@ export function CheckupScreen({
         <div className="w-full bg-[#03213D]/90 backdrop-blur-md rounded-xl border border-[#374365] overflow-hidden shadow-2xl font-mono text-sm">
           <div className="flex items-center gap-2 px-4 py-2 bg-[#062A48] border-b border-[#374365]">
             <Terminal className="w-4 h-4 text-[#669BBC]" />
-            <span className="text-[#669BBC] font-semibold text-xs tracking-wider">SENTINEL SECURE TERMINAL v2.1.0</span>
+            <span className="text-[#669BBC] font-semibold text-xs tracking-wider">SURAKSHASCORE SECURE TERMINAL v2.1.0</span>
           </div>
           
           <div className="p-4 h-80 overflow-y-auto custom-scrollbar flex flex-col gap-1 text-[#FDF0D5]">

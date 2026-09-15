@@ -146,7 +146,7 @@ export function HomeScreen({
       <div className="relative mt-12 md:mt-20 flex flex-col items-center w-full max-w-sm z-10">
         <div className="flex flex-col items-start w-full pl-4 relative">
           <span className="text-white font-sans font-semibold tracking-[0.3em] text-sm mb-[-10px] ml-1">
-            SENTINEL
+            SURAKSHA
           </span>
           <div className="relative">
             <h1 className="font-outline text-outline-glow text-[100px] md:text-[120px] leading-none tracking-wider opacity-80 select-none">

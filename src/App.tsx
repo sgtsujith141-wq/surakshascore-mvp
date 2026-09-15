@@ -28,7 +28,7 @@ function Root() {
     setVisitedTabs(prev => new Set(prev).add(tab));
   }, [tab]);
 
-  if (loading) return <FullPageLoader label="Loading Sentinel..." />;
+  if (loading) return <FullPageLoader label="Loading SurakshaScore MVP..." />;
   if (!isSupabaseConfigured) return <ConfigurationRequired />;
   if (!user) return <AuthScreen />;
 
@@ -111,7 +111,7 @@ function ConfigurationRequired() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-50 p-6">
         <section className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-          <h1 className="text-2xl font-bold text-slate-900">Sentinel configuration unavailable.</h1>
+          <h1 className="text-2xl font-bold text-slate-900">SurakshaScore MVP configuration unavailable.</h1>
           <p className="mt-3 text-sm leading-6 text-slate-600">
             This build was not configured correctly. Please reinstall a correctly configured build.
           </p>
@@ -123,7 +123,7 @@ function ConfigurationRequired() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 p-6">
       <section className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-        <h1 className="text-2xl font-bold text-slate-900">Configure Sentinel</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Configure SurakshaScore MVP</h1>
         <p className="mt-3 text-sm leading-6 text-slate-600">
           Add your Supabase project details to a <code className="rounded bg-slate-100 px-1.5 py-0.5">.env.local</code> file, then restart the development server.
         </p>

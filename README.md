@@ -1,9 +1,19 @@
-# Sentinel
+# SurakshaScore MVP
 
-A personal digital security app that runs a guided checkup of your device,
-accounts and browsing habits, then walks you through fixing what it finds.
+Early MVP of SurakshaScore — a personal digital safety and cyber hygiene toolkit.
 
-## What it does
+> **This is the prototype, not the main project.**
+> This repository is the first working version of SurakshaScore, kept as a
+> record of where the idea started. The project was later rebuilt from scratch
+> as **[surakshascore](https://github.com/sgtsujith141-wq/surakshascore)** —
+> that is the main, evolved version and the one to look at first.
+>
+> This MVP is preserved because it is where the core ideas were first proven:
+> a guided security checkup, remediation playbooks, a client-side encrypted
+> vault, and a breach check that never transmits the password. The rewrite kept
+> those ideas and replaced the engine around them.
+
+## What this MVP does
 
 - **Security checkup** — a staged scan across device, app, network and account
   signals, producing scored findings grouped by severity.
@@ -15,15 +25,27 @@ accounts and browsing habits, then walks you through fixing what it finds.
   k-anonymity (SHA-1, 5-character prefix), so neither the password nor its full
   hash ever leaves the browser.
 - **Local vault** — credential storage encrypted client-side with a master
-  password (PBKDF2 key derivation + AES-GCM via the Web Crypto API).
+  password (PBKDF2-SHA256, 100,000 iterations, AES-GCM, via the Web Crypto API).
 - **Learn section** — threat scenarios and explanatory content.
 
 Two companion pieces ship alongside the web app:
 
-- `extension/` — a Manifest V3 Chrome extension ("Sentinel Web Protection") for
-  link scanning and page-level warnings.
+- `extension/` — a Manifest V3 Chrome extension for link scanning and
+  page-level phishing warnings.
 - `electron/` — an Electron wrapper whose main process adds a local TCP port
   scanner, which a browser cannot perform.
+
+## What changed in the rewrite
+
+The main `surakshascore` repository is a clean-room rebuild, not a fork of this
+code. The most significant differences:
+
+| | This MVP | surakshascore |
+|---|---|---|
+| Scoring | Risk analyzers per category | Pure, deterministic scoring function with a published breakdown |
+| Data honesty | Mixed | Every data point carries a provenance tier (`VERIFIED` / `PERMISSION_BASED` / `SELF_REPORTED` / `UNAVAILABLE`) |
+| Tests | None | 107 unit tests |
+| Backend | Supabase required | No backend |
 
 ## Tech stack
 
@@ -67,8 +89,10 @@ Load unpacked → select `extension/`.
 
 ## Status
 
-Work in progress. The build is clean (`npm run build`) and typecheck passes, but
-several subsystems are scaffolding rather than finished features. Stated plainly:
+Prototype. Feature work has stopped here — active development continues in
+[surakshascore](https://github.com/sgtsujith141-wq/surakshascore). The build is
+clean (`npm run build`) and typecheck passes, but several subsystems are
+scaffolding rather than finished features. Stated plainly:
 
 - **`src/engine/AIAnalyzer.ts` is a stub.** No LLM is connected. It returns a
   deterministic interpretation of flags produced by `DeterministicRuleEngine`,
@@ -84,10 +108,26 @@ several subsystems are scaffolding rather than finished features. Stated plainly
   shipped UI.
 - The port scanner works only in the Electron build. It is unavailable in the
   browser and on Android by design.
-- No test suite.
+- No test suite. (The rewrite has one.)
 
 The password breach check, the client-side encrypted vault, the rule engine, the
 checkup flow and the playbooks are implemented and functional.
+
+## A note on internal identifiers
+
+The rename to SurakshaScore MVP covered user-facing branding and package
+metadata. Internal identifiers still read `sentinel` on purpose:
+
+- the Android `applicationId` / `namespace` (`com.sentinel.security`), its Java
+  and Kotlin package directories, and the matching OAuth `custom_url_scheme` and
+  `redirectTo` callback
+- the Capacitor bridge plugin names (`SentinelDeviceScanner` and siblings), which
+  must match the `@CapacitorPlugin(name = ...)` annotations in the Kotlin source
+- the `sentinel_vault` storage key and the `#sentinel-*` CSS hooks shared
+  between the extension's stylesheet and its content script
+
+Changing any of these would break the Android build, the OAuth callback, the
+native bridge, or an existing user's stored vault, for no user-visible benefit.
 
 ## Repository contents
 

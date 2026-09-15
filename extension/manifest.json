@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Sentinel Web Protection",
+  "name": "SurakshaScore MVP — Web Protection",
   "version": "1.0.0",
-  "description": "Real-time web protection and suspicious link scanner companion for the Sentinel app.",
+  "description": "Real-time web protection and suspicious link scanner companion for the SurakshaScore MVP app.",
   "permissions": [
     "tabs",
     "scripting",
@@ -23,6 +23,6 @@
     }
   ],
   "action": {
-    "default_title": "Sentinel Web Protection"
+    "default_title": "SurakshaScore MVP — Web Protection"
   }
 }

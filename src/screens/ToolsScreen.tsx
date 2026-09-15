@@ -221,7 +221,7 @@ export function ToolsScreen() {
               </div>
               
               <p className="text-cyber-textMuted text-sm mb-6 max-w-xl">
-                Get the Sentinel Chrome Extension to automatically track and scan the websites you visit in real-time. It seamlessly blocks phishing links, typosquatting domains, and IP-based threats across your entire browser.
+                Get the SurakshaScore MVP Chrome Extension to automatically track and scan the websites you visit in real-time. It seamlessly blocks phishing links, typosquatting domains, and IP-based threats across your entire browser.
               </p>
               
               <Button 

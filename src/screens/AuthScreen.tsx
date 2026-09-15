@@ -44,7 +44,7 @@ export function AuthScreen() {
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-lg mb-4">
               <ShieldCheck size={28} />
             </div>
-            <h1 className="text-xl font-bold text-slate-900">Sentinel</h1>
+            <h1 className="text-xl font-bold text-slate-900">SurakshaScore MVP</h1>
             <p className="text-sm text-slate-500 mt-1">
               Your personal digital security companion
             </p>
@@ -151,7 +151,7 @@ export function AuthScreen() {
           </div>
 
           <p className="mt-6 text-center text-xs text-slate-400">
-            Sentinel never stores your passwords or private messages.
+            SurakshaScore never stores your passwords or private messages.
           </p>
         </div>
       </div>

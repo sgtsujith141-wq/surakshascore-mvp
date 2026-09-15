@@ -47,8 +47,8 @@ export function AppShell({ activeTab, onTabChange, children }: AppShellProps) {
           <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-cyber-neon/50 bg-cyber-surface text-cyber-neon shadow-[0_0_15px_rgba(255,42,66,0.3)]">
             <ShieldCheck size={20} className="stroke-[2.5]" />
           </div>
-          <span className="font-outline font-bold text-white text-2xl tracking-widest uppercase">
-            Sentinel
+          <span className="font-outline font-bold text-white text-lg tracking-wide">
+            SurakshaScore
           </span>
         </div>
         <nav className="flex-1 px-4 py-6 space-y-2">
@@ -88,7 +88,7 @@ export function AppShell({ activeTab, onTabChange, children }: AppShellProps) {
           <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyber-neon/50 bg-cyber-surface text-cyber-neon shadow-[0_0_10px_rgba(255,42,66,0.3)]">
             <ShieldCheck size={20} className="stroke-[2.5]" />
           </div>
-          <span className="font-outline font-bold text-white text-xl tracking-widest uppercase">Sentinel</span>
+          <span className="font-outline font-bold text-white text-base tracking-wide">SurakshaScore</span>
         </div>
         <button
           onClick={() => onTabChange('settings')}

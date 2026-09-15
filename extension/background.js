@@ -1,4 +1,4 @@
-// Sentinel Web Protection - Background Service Worker
+// SurakshaScore MVP Web Protection - Background Service Worker
 
 const SUSPICIOUS_KEYWORDS = [
   'login', 'update', 'verify', 'secure', 'account', 'banking', 'wallet', 'free', 'gift', 'support'

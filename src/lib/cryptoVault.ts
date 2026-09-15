@@ -1,4 +1,4 @@
-// Core Cryptography Engine for Sentinel Zero-Knowledge Vault
+// Core Cryptography Engine for the SurakshaScore MVP Zero-Knowledge Vault
 
 // Helper to convert buffer to base64
 function bufferToBase64(buffer: ArrayBuffer): string {

@@ -85,7 +85,7 @@ export function PortScannerCard() {
           <div>
             <h4 className="text-sm font-bold text-white uppercase tracking-wider">Native Feature Required</h4>
             <p className="text-xs text-cyber-textMuted mt-1">
-              Port scanning requires low-level network access. It is only available in the Sentinel Native App.
+              Port scanning requires low-level network access. It is only available in the SurakshaScore MVP desktop app.
             </p>
           </div>
         </div>

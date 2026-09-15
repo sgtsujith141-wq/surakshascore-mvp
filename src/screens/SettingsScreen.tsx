@@ -213,7 +213,7 @@ export function SettingsScreen({ onOpenDiagnostics }: { onOpenDiagnostics?: () =
           <h3 className="text-sm font-sans font-bold uppercase tracking-widest text-white">System Info</h3>
         </div>
         <p className="text-sm font-sans text-cyber-textMuted leading-relaxed">
-          Sentinel is an advanced threat evaluation protocol. It maps your vulnerability surface, highlights exploit vectors, and provides remediation paths. It does not replace active defense countermeasures.
+          SurakshaScore MVP is the early prototype of SurakshaScore, an advanced threat evaluation protocol. It maps your vulnerability surface, highlights exploit vectors, and provides remediation paths. It does not replace active defense countermeasures.
         </p>
       </div>
 

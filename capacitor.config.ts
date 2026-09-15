@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.sentinel.security',
-  appName: 'Sentinel',
+  appName: 'SurakshaScore MVP',
   webDir: 'dist'
 };
 
