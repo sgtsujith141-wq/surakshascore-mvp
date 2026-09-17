@@ -13,6 +13,17 @@ Early MVP of SurakshaScore — a personal digital safety and cyber hygiene toolk
 > vault, and a breach check that never transmits the password. The rewrite kept
 > those ideas and replaced the engine around them.
 
+[![CI](https://github.com/sgtsujith141-wq/surakshascore-mvp/actions/workflows/ci.yml/badge.svg)](https://github.com/sgtsujith141-wq/surakshascore-mvp/actions/workflows/ci.yml)
+[![Status](https://img.shields.io/badge/status-archived%20prototype-lightgrey)](#status)
+[![Successor](https://img.shields.io/badge/successor-surakshascore-blue)](https://github.com/sgtsujith141-wq/surakshascore)
+
+> **No screenshots in this README.** The app requires a configured Supabase
+> project to render anything past its configuration screen, so any screenshot
+> here would either be of that configuration screen or would need a live
+> backend. Rather than stage one, the running UI is shown in the successor
+> repository, [surakshascore](https://github.com/sgtsujith141-wq/surakshascore#readme),
+> which runs standalone.
+
 ## What this MVP does
 
 - **Security checkup** — a staged scan across device, app, network and account
@@ -46,6 +57,118 @@ code. The most significant differences:
 | Data honesty | Mixed | Every data point carries a provenance tier (`VERIFIED` / `PERMISSION_BASED` / `SELF_REPORTED` / `UNAVAILABLE`) |
 | Tests | None | 107 unit tests |
 | Backend | Supabase required | No backend |
+
+## Architecture
+
+Where this MVP's design differs most from the rewrite is that persistence and
+identity are external: Supabase is on the critical path for the app to render at
+all, and the risk logic is spread across per-domain analyzers rather than
+concentrated in one pure scoring function.
+
+```mermaid
+flowchart TB
+    subgraph Clients["Three delivery targets"]
+        direction LR
+        WEB["Web (Vite)"]
+        ELEC["Electron shell<br/><i>adds local TCP port scanner</i>"]
+        EXT["Chrome MV3 extension<br/><i>link scanning · page warnings</i>"]
+        AND["Android (Capacitor)"]
+    end
+
+    AUTH["AuthProvider<br/><b>Supabase auth — required to render</b>"]
+
+    subgraph Engine["src/engine/"]
+        DRE["DeterministicRuleEngine"]
+        SS["SecurityScanner"]
+        RA["risk analyzers<br/><i>device · network · app</i>"]
+        AI["AIAnalyzer<br/><b>stub — no model connected</b>"]
+    end
+
+    subgraph Local["src/lib/ — runs entirely client-side"]
+        CV["cryptoVault<br/><b>PBKDF2-SHA256 100k · AES-GCM</b><br/>Web Crypto API"]
+        HIBP["hibp<br/><b>k-anonymity breach check</b>"]
+        URLS["urlScanner"]
+    end
+
+    DATA["src/data/<br/>checkup questions · playbooks · threat scenarios"]
+    SB[("Supabase<br/>Postgres + auth")]
+
+    WEB & ELEC & EXT & AND --> AUTH
+    AUTH --> SB
+    AUTH --> Engine
+    SS --> RA --> DRE --> AI
+    DATA --> DRE
+    DRE --> SB
+    Local --> WEB
+    ELEC -.port scan.-> RA
+
+    style AI fill:#fee2e2,stroke:#dc2626
+    style AUTH fill:#fef3c7,stroke:#d97706
+    style CV fill:#dcfce7,stroke:#16a34a
+```
+
+### The two pieces worth reading
+
+**`src/lib/cryptoVault.ts`** — the zero-knowledge vault. A master password is
+stretched with PBKDF2-SHA256 at 100,000 iterations over a per-vault salt, and
+the derived key encrypts entries with AES-GCM through the Web Crypto API. The
+master password and the derived key never leave the browser and are never sent
+to Supabase; only ciphertext is stored. This survived into the rewrite as a
+design principle.
+
+**`src/lib/hibp.ts`** — the breach check. SHA-1 of the password is computed
+locally, only the first five hex characters are sent to the Have I Been Pwned
+range endpoint, and the suffix is matched against the returned range in the
+browser. Neither the password nor its full hash is transmitted.
+
+## Engineering decisions and trade-offs
+
+**Supabase for auth and persistence.** It bought working authentication, a
+Postgres schema and row-level security without writing a backend, which is the
+right call for proving a product idea quickly. *Trade-off, and the one that
+drove the rewrite:* it put a network dependency on the critical path of a
+security app. Without credentials the app renders a configuration screen and
+nothing else — there is no offline or local-only mode. The successor has no
+backend at all.
+
+**Client-side encryption rather than server-side.** The vault was built so that
+compromising the database yields ciphertext only. *Trade-off:* a forgotten
+master password is unrecoverable by design, and there is no sharing or sync.
+
+**A stub where the AI was going to be.** `AIAnalyzer` returns a deterministic
+interpretation of rule-engine flags and reports `INSUFFICIENT_EVIDENCE` when
+given nothing. Leaving a documented stub is better than wiring a model that
+would emit unbounded security claims — and the rewrite made that permanent by
+generating all copy from typed templates instead.
+
+**Risk logic split across per-domain analyzers.** `deviceRiskAnalyzer`,
+`networkRiskAnalyzer` and `appRiskAnalyzer` each own their scoring.
+*Trade-off:* no single place defines how the overall number is produced, so it
+cannot be shown to the user as a derivation or unit-tested as a whole. Replacing
+this with one pure scoring function was the main structural change in the
+rewrite.
+
+**Three delivery targets from one codebase.** Web, Electron and a Chrome
+extension, plus Capacitor for Android. The Electron main process does what a
+browser cannot — a local TCP port scan. *Trade-off:* four build paths to keep
+working, and capability now varies per target.
+
+## Verified status
+
+Checked on the current commit:
+
+| Check | Command | Result |
+|---|---|---|
+| Typecheck | `npm run typecheck` | **Passes** |
+| Production build | `npm run build` | **Passes** |
+| Lint | `npm run lint` | **206 errors** — 121 `no-explicit-any`, 76 `no-unused-vars`, 9 `prefer-const` |
+| Tests | — | **None.** The rewrite has 107. |
+
+The 206 lint errors are pre-existing and are recorded rather than fixed: this is
+an archived prototype and the effort belongs in the successor. CI runs lint as a
+separate, clearly-labelled informational job that is **expected to fail**; the
+rules have not been relaxed to produce a green badge. Typecheck and build are
+the gating checks.
 
 ## Tech stack
 

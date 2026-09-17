@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Typecheck and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Production build
+        run: npm run build
+
+  lint:
+    name: Lint (informational — 206 known errors)
+    runs-on: ubuntu-latest
+    # This job is expected to fail. The repository has 206 pre-existing ESLint
+    # errors (121 no-explicit-any, 76 no-unused-vars, 9 prefer-const). It is an
+    # archived prototype, so they are recorded rather than fixed, and the rules
+    # are NOT relaxed to manufacture a green badge. `continue-on-error` keeps the
+    # count visible without gating the build; the README states the figure.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: ESLint
+        run: npm run lint
